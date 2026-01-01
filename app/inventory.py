@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 class Inventory:
     def __init__(self):
         self.url = "https://www.saucedemo.com/inventory.html"
-        self.page_product_count = 5
+        self.page_product_count = 6
 
     @staticmethod
     def config_driver():

@@ -1,21 +1,25 @@
-import pytest
-from login import Login
-from inventory import Inventory
+import time
+
+from app.login import Login
+from app.inventory import Inventory
 
 
-@pytest.fixture
-def driver():
-    inventory_page = Inventory()
-    driver = inventory_page.config_driver()
-    yield driver
-    driver.quit()
-
-
-def test_total_products(driver):
+def test_total_products():
+    # Initialize login page and driver
     login_page = Login()
-    login_page.login(driver, login_page.correct_username, login_page.correct_password)
-    inventory_page = Inventory()
-    product_count = inventory_page._products_count(driver)
+    driver = login_page.config_driver()
 
-    # Assertion: after success, check if redirected to inventory page
-    assert True if product_count == inventory_page.page_product_count else False
+    try:
+        # Log in with correct credentials
+        login_page.login(driver, login_page.correct_username, login_page.correct_password)
+
+        # Initialize inventory page and get product count
+        inventory_page = Inventory()
+        product_count = inventory_page._products_count(driver)
+
+        # Assertion: check if product count matches expected count
+        assert product_count == inventory_page.page_product_count
+
+    finally:
+        # Ensure driver quits even if test fails
+        driver.quit()
